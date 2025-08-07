@@ -12,5 +12,5 @@ app.use(express.json());
 app.use('/api/appointments', appointmentRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => app.listen(5001, () => console.log('Appointment Service running on port 5001')))
+  .then(() => app.listen(7002, () => console.log('Appointment Service running on port 7002')))
   .catch(err => console.error(err));

@@ -12,5 +12,5 @@ app.use(express.json());
 app.use('/api/ehr', ehrRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => app.listen(5002, () => console.log('EHR Service running on port 5002')))
+  .then(() => app.listen(7004, () => console.log('EHR Service running on port 7004')))
   .catch(err => console.error(err));

@@ -12,5 +12,5 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => app.listen(5005, () => console.log('User Service running on port 5005')))
+    .then(() => app.listen(7001, () => console.log('User Service running on port 7001')))
     .catch(err => console.error(err));

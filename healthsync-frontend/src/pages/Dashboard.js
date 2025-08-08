@@ -1,84 +1,94 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
-function Dashboard() {
-  const [appointments, setAppointments] = useState([]);
-  const [ehr, setEhr] = useState([]);
-  const [form, setForm] = useState({ date: '', doctor: '' });
-  const token = localStorage.getItem('token');
+export default function Dashboard() {
+  const [appointmentData, setAppointmentData] = useState({
+    doctor: '',
+    date: '',
+    time: '',
+    reason: ''
+  });
 
-  useEffect(() => {
-    if (!token) return;
-
-    const fetchData = async () => {
-      try {
-        const appointmentsRes = await axios.get('http://localhost:7002/api/appointments', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setAppointments(appointmentsRes.data);
-
-        const ehrRes = await axios.get('http://localhost:7004/api/ehr', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setEhr(ehrRes.data);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, [token]);
+  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setAppointmentData({
+      ...appointmentData,
+      [e.target.name]: e.target.value
+    });
   };
 
   const handleAppointmentSubmit = async (e) => {
     e.preventDefault();
+    console.log('Submitting:', appointmentData); // Debug line
+
     try {
-      await axios.post('http://localhost:7002/api/appointments', form, {
-        headers: { Authorization: `Bearer ${token}` },
+      const response = await axios.post(
+        'http://localhost:7002/api/appointments',
+        appointmentData,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+
+      console.log('Appointment booked:', response.data);
+      setMessage('Appointment booked successfully!');
+      // Clear the form
+      setAppointmentData({
+        doctor: '',
+        date: '',
+        time: '',
+        reason: ''
       });
-      alert('Appointment booked!');
-      window.location.reload(); // refresh dashboard to show new data
     } catch (err) {
-      alert('Failed to book appointment');
-      console.error(err);
+      console.error('Error booking appointment:', err.response?.data || err.message);
+      setMessage(err.response?.data?.message || 'Failed to book appointment');
     }
   };
 
   return (
-    <div>
-      <h2>Dashboard</h2>
+    <div style={{ maxWidth: 400, margin: '0 auto' }}>
+      <h2>Book an Appointment</h2>
+      <form onSubmit={handleAppointmentSubmit}>
+        <input
+          type="text"
+          name="doctor"
+          placeholder="Doctor's Name"
+          value={appointmentData.doctor}
+          onChange={handleChange}
+          required
+        />
+        <br /><br />
+        <input
+          type="date"
+          name="date"
+          value={appointmentData.date}
+          onChange={handleChange}
+          required
+        />
+        <br /><br />
+        <input
+          type="time"
+          name="time"
+          value={appointmentData.time}
+          onChange={handleChange}
+          required
+        />
+        <br /><br />
+        <textarea
+          name="reason"
+          placeholder="Reason for Appointment"
+          value={appointmentData.reason}
+          onChange={handleChange}
+          required
+        />
+        <br /><br />
+        <button type="submit">Book Appointment</button>
+      </form>
 
-      <section>
-        <h3>Book Appointment</h3>
-        <form onSubmit={handleAppointmentSubmit}>
-          <input type="date" name="date" value={form.date} onChange={handleChange} required />
-          <input type="text" name="doctor" placeholder="Doctor's Name" value={form.doctor} onChange={handleChange} required />
-          <button type="submit">Book</button>
-        </form>
-      </section>
-
-      <section>
-        <h3>Your Appointments</h3>
-        <ul>
-          {appointments.map((appt) => (
-            <li key={appt._id}>{appt.date} - {appt.doctor}</li>
-          ))}
-        </ul>
-      </section>
-
-      <section>
-        <h3>Your Health Records (EHR)</h3>
-        <ul>
-          {ehr.map((record) => (
-            <li key={record._id}>{record.description} ({record.date})</li>
-          ))}
-        </ul>
-      </section>
+      {message && <p style={{ marginTop: '20px', color: 'red' }}>{message}</p>}
     </div>
   );
 }
-
-export default Dashboard;

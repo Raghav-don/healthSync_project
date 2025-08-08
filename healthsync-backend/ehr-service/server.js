@@ -1,16 +1,23 @@
-// server.js
+// ehr-service/server.js
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const cors = require('cors');
 const ehrRoutes = require('./routes/ehrRoutes');
-require('dotenv').config();
 
+dotenv.config();
 const app = express();
-app.use(cors());
+
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('EHR Service DB connected'))
+  .catch(err => console.error(err));
 
 app.use('/api/ehr', ehrRoutes);
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => app.listen(7004, () => console.log('EHR Service running on port 7004')))
-  .catch(err => console.error(err));
+const PORT = 7004;
+app.listen(PORT, () => {
+  console.log(`EHR Service running on port ${PORT}`);
+});

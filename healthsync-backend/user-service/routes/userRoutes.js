@@ -1,9 +1,10 @@
 // user-service/routes/userRoutes.js
 const express = require('express');
-const { register, login } = require('../controllers/userController');
 const router = express.Router();
+const { registerUser, loginUser } = require('../controllers/userController');
 
-router.post('/register', register);
-router.post('/login', login);
+// ❌ One of these might be undefined if not exported properly
+router.post('/register', registerUser);
+router.post('/login', loginUser);
 
 module.exports = router;

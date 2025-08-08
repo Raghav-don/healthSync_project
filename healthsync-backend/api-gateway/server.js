@@ -1,42 +1,22 @@
 // api-gateway/server.js
 const express = require('express');
-const cors = require('cors');
 const dotenv = require('dotenv');
+const cors = require('cors');
 const { createProxyMiddleware } = require('http-proxy-middleware');
 
 dotenv.config();
 const app = express();
-app.use(cors());
+
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 
-// Logging middleware (optional but helpful)
-app.use((req, res, next) => {
-  console.log(`[Gateway] ${req.method} ${req.originalUrl}`);
-  next();
-});
+app.use('/api/users', createProxyMiddleware({ target: 'http://localhost:7001', changeOrigin: true }));
+app.use('/api/auth', createProxyMiddleware({ target: 'http://localhost:7001', changeOrigin: true }));
+app.use('/api/appointments', createProxyMiddleware({ target: 'http://localhost:7002', changeOrigin: true }));
+app.use('/api/ehr', createProxyMiddleware({ target: 'http://localhost:7004', changeOrigin: true }));
+app.use('/api/notifications', createProxyMiddleware({ target: 'http://localhost:7003', changeOrigin: true }));
 
-// Gateway routes
-app.use('/api/users', createProxyMiddleware({
-  target: process.env.USER_SERVICE_URL,
-  changeOrigin: true
-}));
-
-app.use('/api/appointments', createProxyMiddleware({
-  target: process.env.APPOINTMENT_SERVICE_URL,
-  changeOrigin: true
-}));
-
-app.use('/api/ehr', createProxyMiddleware({
-  target: process.env.EHR_SERVICE_URL,
-  changeOrigin: true
-}));
-
-app.use('/api/notifications', createProxyMiddleware({
-  target: process.env.NOTIFICATION_SERVICE_URL,
-  changeOrigin: true
-}));
-
-const PORT = process.env.PORT;
+const PORT = 7000;
 app.listen(PORT, () => {
   console.log(`API Gateway running on port ${PORT}`);
 });

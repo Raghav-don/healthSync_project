@@ -1,16 +1,23 @@
-// server.js
+// appointment-service/server.js
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const cors = require('cors');
 const appointmentRoutes = require('./routes/appointmentRoutes');
-require('dotenv').config();
 
+dotenv.config();
 const app = express();
-app.use(cors());
+
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Appointment Service DB connected'))
+  .catch(err => console.error(err));
 
 app.use('/api/appointments', appointmentRoutes);
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => app.listen(7002, () => console.log('Appointment Service running on port 7002')))
-  .catch(err => console.error(err));
+const PORT = 7002;
+app.listen(PORT, () => {
+  console.log(`Appointment Service running on port ${PORT}`);
+});

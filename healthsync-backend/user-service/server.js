@@ -1,16 +1,25 @@
 // user-service/server.js
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
 const cors = require('cors');
 const userRoutes = require('./routes/userRoutes');
-require('dotenv').config();
+//const authRoutes = require('./routes/authRoutes');
 
+dotenv.config();
 const app = express();
-app.use(cors());
+
+app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
 app.use(express.json());
 
-app.use('/api/users', userRoutes);
-
 mongoose.connect(process.env.MONGO_URI)
-    .then(() => app.listen(7001, () => console.log('User Service running on port 7001')))
-    .catch(err => console.error(err));
+  .then(() => console.log('User Service DB connected'))
+  .catch(err => console.error(err));
+
+app.use('/api/users', userRoutes);
+//app.use('/api/auth', authRoutes);
+
+const PORT = 7001;
+app.listen(PORT, () => {
+  console.log(`User Service running on port ${PORT}`);
+});

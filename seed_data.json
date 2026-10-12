@@ -1,0 +1,72 @@
+[
+  {
+    "name": "Dr. Sarah Mitchell, MD",
+    "email": "sarah.mitchell@healthsync.com",
+    "password": "Password123!",
+    "role": "doctor",
+    "specialization": "Cardiology",
+    "qualification": "MD, FACC - Harvard Medical School",
+    "experience": 14,
+    "consultationFee": 750,
+    "phone": "+1 (555) 019-2834",
+    "address": "Cardiovascular Wing, Suite 402"
+  },
+  {
+    "name": "Dr. Robert Chen, MD",
+    "email": "robert.chen@healthsync.com",
+    "password": "Password123!",
+    "role": "doctor",
+    "specialization": "Neurology",
+    "qualification": "MD, PhD - Johns Hopkins University",
+    "experience": 16,
+    "consultationFee": 850,
+    "phone": "+1 (555) 019-4821",
+    "address": "Neuroscience Institute, Suite 305"
+  },
+  {
+    "name": "Dr. Priya Patel, MS",
+    "email": "priya.patel@healthsync.com",
+    "password": "Password123!",
+    "role": "doctor",
+    "specialization": "Orthopedics",
+    "qualification": "MS (Ortho), Fellowship in Joint Replacement",
+    "experience": 11,
+    "consultationFee": 650,
+    "phone": "+1 (555) 019-7362",
+    "address": "Orthopedic & Spine Center, Suite 210"
+  },
+  {
+    "name": "Dr. Anthony Davis, MD",
+    "email": "anthony.davis@healthsync.com",
+    "password": "Password123!",
+    "role": "doctor",
+    "specialization": "Pediatrics",
+    "qualification": "MD (Pediatrics) - Stanford Health",
+    "experience": 9,
+    "consultationFee": 500,
+    "phone": "+1 (555) 019-8923",
+    "address": "Children's Health Pavilion, Floor 2"
+  },
+  {
+    "name": "Dr. Elena Rostova, MD",
+    "email": "elena.rostova@healthsync.com",
+    "password": "Password123!",
+    "role": "doctor",
+    "specialization": "Dermatology",
+    "qualification": "Board Certified Dermatologist - NYU",
+    "experience": 8,
+    "consultationFee": 600,
+    "phone": "+1 (555) 019-9182",
+    "address": "Derma Care Center, Suite 108"
+  },
+  {
+    "name": "John Doe (Demo Patient)",
+    "email": "patient@healthsync.com",
+    "password": "Password123!",
+    "role": "patient",
+    "phone": "+1 (555) 234-5678",
+    "gender": "male",
+    "bloodGroup": "O+",
+    "address": "42 Healthway Blvd, Suite 12"
+  }
+]

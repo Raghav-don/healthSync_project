@@ -1,10 +1,21 @@
 // user-service/routes/userRoutes.js
 const express = require('express');
 const router = express.Router();
-const { registerUser, loginUser } = require('../controllers/userController');
+const {
+  registerUser,
+  loginUser,
+  getProfile,
+  updateProfile,
+  getDoctors,
+  getDoctorById,
+} = require('../controllers/userController');
+const authenticate = require('../middleware/authMiddleware');
 
-// ❌ One of these might be undefined if not exported properly
 router.post('/register', registerUser);
 router.post('/login', loginUser);
+router.get('/profile', authenticate, getProfile);
+router.put('/profile', authenticate, updateProfile);
+router.get('/doctors', getDoctors);
+router.get('/doctors/:id', getDoctorById);
 
 module.exports = router;

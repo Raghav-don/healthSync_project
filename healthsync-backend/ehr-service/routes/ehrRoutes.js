@@ -1,17 +1,28 @@
-// routes/ehrRoutes.js
+// ehr-service/routes/ehrRoutes.js  — FIXED: import EHR model
 const express = require('express');
 const router = express.Router();
 const authenticate = require('../middleware/authMiddleware');
+const {
+  createEHR,
+  getEHRByPatient,
+  getMyEHR,
+  updateEHR,
+  deleteEHR,
+} = require('../controllers/ehrController');
 
-router.get('/records', authenticate, async (req, res) => {
-  const records = await EHR.find({ userId: req.user.id });
-  res.json(records);
-});
+// Patient reads own records
+router.get('/my', authenticate, getMyEHR);
 
-router.post('/records', authenticate, async (req, res) => {
-  const record = new EHR({ userId: req.user.id, ...req.body });
-  await record.save();
-  res.status(201).json(record);
-});
+// Doctor/admin creates EHR for a patient
+router.post('/', authenticate, createEHR);
+
+// Get all EHR records for a specific patient (doctor/admin)
+router.get('/patient/:patientId', authenticate, getEHRByPatient);
+
+// Update a specific EHR record
+router.put('/:id', authenticate, updateEHR);
+
+// Delete a specific EHR record (admin only)
+router.delete('/:id', authenticate, deleteEHR);
 
 module.exports = router;
